@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: sensini7/recoverysystem-frontend:latest
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:5000
+    networks:
+      - app-network
+    restart: always
+
+  backend:
+    image: sensini7/recoverysystem-backend:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      # This should be your MongoDB Atlas connection string
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - app-network
+    restart: always
+
+networks:
+  app-network:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# version: '3.8'
+
+# services:
+#   frontend:
+#     image: <dockerhub-username>/recoverysystem-frontend:latest
+#     ports:
+#       - "80:80"
+#     depends_on:
+#       - backend
+#     environment:
+#       - REACT_APP_BACKEND_URL=http://backend:5000
+#     restart: always
+#     networks:
+#       - frontend-network
+
+#   backend:
+#     image: <dockerhub-username>/recoverysystem-backend:latest
+#     expose:
+#       - "5000"
+#     environment:
+#       - NODE_ENV=production
+#       - PORT=5000
+#       - MONGO_URI=mongodb://mongo-user:${MONGO_PASSWORD}@mongo:27017/recoverysystem?authSource=admin
+#       - JWT_SECRET=${JWT_SECRET}
+#       - OTHER_ENV_VARS=values
+#     restart: always
+#     networks:
+#       - frontend-network
+#       - backend-network
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+#   mongo:
+#     image: mongo:6.0
+#     volumes:
+#       - mongo-data:/data/db
+#       - mongo-config:/data/configdb
+#     environment:
+#       - MONGO_INITDB_ROOT_USERNAME=mongo-user
+#       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+#     restart: always
+#     networks:
+#       - backend-network
+#     healthcheck:
+#       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+
+# networks:
+#   frontend-network:
+#   backend-network:
+
+# volumes:
+#   mongo-data:
+#   mongo-config:
